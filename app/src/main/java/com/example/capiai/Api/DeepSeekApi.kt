@@ -15,7 +15,7 @@ interface DeepSeekApi {
 }
 
 data class ChatRequest(
-    val model: String = "deepseek-chat",
+    val model: String = "deepseek/deepseek-r1",
     val messages: List<Message>,
     val temperature: Double = 0.7
 )
@@ -34,23 +34,23 @@ data class Choice(
 )
 
 object ApiClient {
-    private const val BASE_URL = "https://openrouter.ai/api/v1"
-    private const val API_KEY = "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\n"
+    private const val BASE_URL = "https://openrouter.ai/api/v1/"
+    private const val API_KEY = "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"
 
     val instance: DeepSeekApi by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(
                 OkHttpClient.Builder()
-                .addInterceptor { chain ->
-                    chain.proceed(
-                        chain.request().newBuilder()
+                    .addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
                             .addHeader("Authorization", "Bearer $API_KEY")
                             .addHeader("Content-Type", "application/json")
                             .build()
-                    )
-                }
-                .build())
+                        chain.proceed(request)
+                    }
+                    .build()
+            )
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(DeepSeekApi::class.java)

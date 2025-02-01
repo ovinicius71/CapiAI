@@ -1,4 +1,4 @@
-package com.example.capiai.view
+package com.example.capiai.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
